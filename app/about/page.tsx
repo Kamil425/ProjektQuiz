@@ -9,7 +9,7 @@ export default function About() {
 <div className='h-1/6 w-full flex justify-center'><Navbar/></div>
   
   
-  <div className="h-full w-full flex justify-center flex-col items-center">
+  <div className="h-full w-full flex justify-center flex-col items-center mt-40">
     
     <div className="h-full w-4/6 flex flex-wrap pt-6">
         
