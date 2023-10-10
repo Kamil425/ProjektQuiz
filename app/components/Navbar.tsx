@@ -1,5 +1,6 @@
 import Image from 'next/image'
 import Logo from 'public/Logo.webp'
+import Link from 'next/link';
 
 const Navbar = () => {
     return ( 
@@ -11,7 +12,7 @@ const Navbar = () => {
                     <div className='h-full w-6/12 justify-end flex flex-row items-center text-xl font-bold'>
                         <p className='w-1/4 mr-6 text-four hover:text-secondary transition-all duration-300'>Jak to działa?</p>
                         <p className='w-1/4 mr-6 text-four hover:text-secondary transition-all duration-300'>Features</p>
-                        <p className='w-1/4 mr-6 text-four hover:text-secondary transition-all duration-300'>O nas</p>
+                        <Link href="/about" className='w-1/4 mr-6 text-four hover:text-secondary transition-all duration-300'><p >O nas</p></Link>
                         <button className='mr-6 h-1/2 w-1/4 text-three border-solid border-2 border-three'>Login</button>
                     </div>
                     </div>
