@@ -13,6 +13,7 @@ const config: Config = {
       'three': '#FCC822',
       'four': '#E0E0E0',
       'white': '#FFFFFF',
+      'five': '#C1BBBB'
     },
     extend: {
       backgroundImage: {
