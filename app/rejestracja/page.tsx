@@ -1,6 +1,61 @@
+"use client";
 import React from "react";
+import Link from "next/link";
+import{useState} from 'react';
+import { useRouter } from "next/navigation";
 
 const Rejestracja = () => {
+
+    const [name, setName] = useState("");
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+
+    const router = useRouter();
+
+    const handleSubmit  = async(e:any) => {
+        e.preventDefault();
+
+        if(!name || !email || !password) {
+            alert("Please fill all the fields!");
+            return;
+        }
+
+        try{
+
+            const resUserExists = await fetch("api/userExists",{
+
+                method: "POST",
+                headers: {"Content-Type": "application/json"},
+                body: JSON.stringify({email}),
+            });
+            const {user} = await resUserExists.json();
+            if(user){
+                alert("User already exists!");
+                return;
+            }
+            
+
+            const res = await fetch("/api/register",{
+                method: "POST",
+                headers: {"Content-Type": "application/json"},
+                body: JSON.stringify({
+                    name, 
+                    email, 
+                    password,})
+            });
+            if (res.ok){
+                const form = e.target;
+                form.reset();
+                router.push("/login");
+            }
+            else{
+                alert("Something went wrong!");
+            }
+        }catch(err){console.log("Error during registration",err)}
+    };
+
+    console.log("Name : ", name);
+
     return (
   
   <div style={{width: '100%', height: '100%', position: 'relative', background: 'white'}}>
@@ -10,32 +65,33 @@ const Rejestracja = () => {
       </div>
       <div style={{width: '239.19px', height: '33.67px', left: '73.18px', top: '109.47px', position: 'absolute', textAlign: 'center', color: 'rgba(0, 0, 0, 0.60)', fontSize: '14.43px', fontFamily: 'Roboto', fontWeight: '400', wordWrap: 'break-word'}}>Welcome!<br/> Please create your account.</div>
       
-      
+     <form onSubmit={handleSubmit}>
       <div style={{width: '347.76px', height: '42.96px', left: '31.35px', top: '150.68px', position: 'absolute'}}>
           <div style={{width: '347.76px', height: '62.96px', left: '0px', top: '0px', position: 'absolute', background: 'white', border: '0.58px #C1BBBB solid'}}></div>
           <div style={{width: '51.80px', height: '0px', left: '2.51px', top: '62.38px', position: 'absolute', transform: 'rotate(-90deg)', transformOrigin: '0 0', background: '#FCC822', border: '2.90px #FCC822 solid'}}></div>
           <div style={{left: '16.95px', top: '6.97px', position: 'absolute', color: 'rgba(0, 0, 0, 0.61)', fontSize: '10.45px', fontFamily: 'Roboto', fontWeight: '400', wordWrap: 'break-word'}}>User Name</div>
-          <input className="poleNazwa" style={{ left: '16.95px', top: '22.64px', position: 'absolute', color: '#FCC822', fontSize: '10.45px', fontFamily: 'Roboto', fontWeight: '500', wordWrap: 'break-word'}}></input>
+          <input onChange={e => setName(e.target.value)} type="text" style={{ left: '16.95px', top: '22.64px', position: 'absolute', color: '#FCC822', fontSize: '10.45px', fontFamily: 'Roboto', fontWeight: '500', wordWrap: 'break-word'}}></input>
       </div>
       
       <div style={{width: '82.44px', left: '31.35px', top: '311.77px', position: 'absolute'}}>
-          <input className='checkboxRejestracja' type='checkbox' style={{width: '8.71px', height: '8.71px', left: '0px', top: '1.74px', position: 'absolute', background: 'white', border: '0.58px #B4B4B4 solid'}}></input>
+          
           <div style={{width: '68.51px', height: '12.19px', left: '13.93px', top: '0px', position: 'absolute', color: 'rgba(0, 0, 0, 0.61)', fontSize: '10.45px', fontFamily: 'Roboto', fontWeight: '400', wordWrap: 'break-word'}}>Remember Me</div>
       </div>
       
       <div style={{width: '347.76px', height: '42.96px', left: '31.35px', top: '269.06px', position: 'absolute', background: 'white', border: '0.58px #C1BBBB solid'}}></div>
       <div style={{width: '46.45px', height: '12.19px', left: '47.03px', top: '276.03px', position: 'absolute', color: 'rgba(0, 0, 0, 0.61)', fontSize: '10.45px', fontFamily: 'Roboto', fontWeight: '400', wordWrap: 'break-word'}}>Password</div>
-      <input className="poleHasloRejestracja" type='password' style={{width: '88.25px', height: '12.19px', left: '47.03px', top: '291.71px', position: 'absolute', color: '#FCC822', fontSize: '10.45px', fontFamily: 'Roboto', fontWeight: '500', wordWrap: 'break-word'}}></input>
+        <input onChange={e => setPassword(e.target.value)}  type='password' style={{width: '88.25px', height: '12.19px', left: '47.03px', top: '291.71px', position: 'absolute', color: '#FCC822', fontSize: '10.45px', fontFamily: 'Roboto', fontWeight: '500', wordWrap: 'break-word'}}></input>
       <div style={{width: '347.76px', height: '42.96px', left: '31.35px', top: '206.68px', position: 'absolute'}}>
           <div style={{width: '347.76px', height: '62.96px', left: '0px', top: '0px', position: 'absolute', background: 'white', border: '0.58px #C1BBBB solid'}}></div>
           <div style={{width: '51.80px', height: '0px', left: '2.51px', top: '62.38px', position: 'absolute', transform: 'rotate(-90deg)', transformOrigin: '0 0', background: '#FCC822', border: '2.90px #FCC822 solid'}}></div>
           <div style={{left: '16.95px', top: '6.97px', position: 'absolute', color: 'rgba(0, 0, 0, 0.61)', fontSize: '10.45px', fontFamily: 'Roboto', fontWeight: '400', wordWrap: 'break-word'}}>Email Address</div>
-          <input className="poleEmailRejestracja" style={{ left: '16.95px', top: '22.64px', position: 'absolute', color: '#FCC822', fontSize: '10.45px', fontFamily: 'Roboto', fontWeight: '500', wordWrap: 'break-word'}}></input>
+          <input onChange={e => setEmail(e.target.value)}  style={{ left: '16.95px', top: '22.64px', position: 'absolute', color: '#FCC822', fontSize: '10.45px', fontFamily: 'Roboto', fontWeight: '500', wordWrap: 'break-word'}}></input>
       </div>
-      <button className="ButtonSignupRejestracja" style={{width: '71.41px', height: '37.16px', left: '31.35px', top: '370.40px', position: 'absolute', background: 'orange', color: 'white', fontSize: '11.61px', fontFamily: 'Poppins', fontWeight: '500', wordWrap: 'break-word'}}>Signup
+      
+      <button  style={{width: '71.41px', height: '37.16px', left: '31.35px', top: '370.40px', position: 'absolute', background: 'orange', color: 'white', fontSize: '11.61px', fontFamily: 'Poppins', fontWeight: '500', wordWrap: 'break-word'}}>Signup
            </button>
      
-         
+        </form> 
      
       <div style={{width: '248.49px', height: '53.32px', left: '68.51px', top: '38.32px', position: 'absolute'}}>
           <div style={{width: '234.56px', height: '53.32px', left: '13.93px', top: '0px', position: 'absolute'}}><span style={{color: '#3B3B3B', fontSize: '45.70px', fontFamily: 'Poppins', fontWeight: '400', wordWrap: 'break-word'}}>Quiz</span><span style={{color: '#FCC822', fontSize: '45.70px', fontFamily: 'Poppins', fontWeight: '400', wordWrap: 'break-word'}}>Grad</span></div>
