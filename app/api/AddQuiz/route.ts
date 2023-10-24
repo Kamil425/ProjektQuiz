@@ -7,48 +7,29 @@ const mongoClient = new MongoClient(process.env.MONGODB_URI as string, {
     if (req.method === 'POST') {
       try{
       const formData = await req.json();
-      
+
       const db = mongoClient.db('Projekt')
       const collection = db.collection('Quizy')
-      const AnswerCollection = db.collection('Pytania')
-      
+
       const checkExisting = await 
         collection.findOne({ Nazwa_Quizu: formData.NazwaQuiz });
         if (checkExisting) {
             mongoClient.close();
             throw new Error('Quiz już istnieje')
         }
-        
         const quiz = {
             Nazwa_Quizu: formData.NazwaQuiz,
             Kategoria: formData.KategoriaQuiz,
             Trudność: formData.TrudnoscQuiz,
             Typ: formData.TypQuiz,
+            Pytania: formData.TrescPytania,
+            OdpowiedzA: formData.OdpowiedzA,
+            OdpowiedzB: formData.OdpowiedzB,
+            OdpowiedzC: formData.OdpowiedzC,
+            OdpowiedzD: formData.OdpowiedzD,
             Utworzony: new Date()
         }
-        console.log('halo')
-        const Pytania = {
-           Pytania: formData.Questions.map((question:any) => {
-                return {
-                    Pytanie: question.question,
-                    Odpowiedzi: question.answers.map((answer:any) => {
-                        return {
-                            Odpowiedz: answer.answer,
-                            Poprawna: answer.isCorrect
-                        }
-                    }),
-                }
-                
-            },
-            ),
-            NazwaQuizu: quiz.Nazwa_Quizu
-        }
-        
-        const statusQuiz = await collection.insertOne(quiz)
-        console.log(statusQuiz.acknowledged)
-        const statusAnswer = await AnswerCollection.insertOne(Pytania)
-        console.log(statusAnswer.insertedId)
-       
+        const status = await collection.insertOne(quiz)
         mongoClient.close();
 
         return NextResponse.json({
